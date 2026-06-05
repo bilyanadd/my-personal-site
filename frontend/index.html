@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bg">
 <head>
@@ -5,26 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Аз - [Твоето Име]</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; text-align: center; padding: 50px; }
-    h1 { color: #2c3e50; }
-    .fact { background: white; margin: 20px auto; padding: 20px; border-radius: 10px; max-width: 600px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center; padding: 40px; margin: 0; }
+    h1 { font-size: 3em; margin-bottom: 20px; }
+    .fact { background: rgba(255,255,255,0.15); margin: 20px auto; padding: 25px; border-radius: 15px; max-width: 700px; }
+    button { margin-top: 30px; padding: 12px 30px; font-size: 1.1em; background: white; color: #667eea; border: none; border-radius: 50px; cursor: pointer; }
   </style>
 </head>
 <body>
   <h1>Здравей! Аз съм [Твоето Име]</h1>
-  <p>Ето някои интересни факти за мен:</p>
-  
-  <div class="fact" id="fact1">Факт 1: ...</div>
-  <div class="fact" id="fact2">Факт 2: ...</div>
-  <div class="fact" id="fact3">Факт 3: ...</div>
+  <p>Интересни факти за мен:</p>
+
+  <div class="fact" id="fact-display">Зареждане...</div>
+  <button onclick="loadRandomFact()">Нов факт</button>
 
   <script>
-    const facts = [
-      "Обичам да програмирам и да уча нови технологии.",
-      "Имам [брой] години опит в [твоята област].",
-      "Любимото ми хоби е [твоето хоби]."
-    ];
-    // Можеш да добавиш повече
+    async function loadRandomFact() {
+      try {
+        const res = await fetch('http://localhost:3000/facts');
+        const facts = await res.json();
+        const random = facts[Math.floor(Math.random() * facts.length)];
+        document.getElementById('fact-display').innerHTML = random.text;
+      } catch(e) {
+        document.getElementById('fact-display').innerHTML = 'Грешка при връзка с базата данни';
+      }
+    }
+    window.onload = loadRandomFact;
   </script>
 </body>
 </html>

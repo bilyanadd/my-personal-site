@@ -1,15 +1,30 @@
+
 version: '3.8'
 
 services:
   frontend:
     build: ./frontend
     ports:
-      - "8080:80"
+      - '8080:80'
     restart: unless-stopped
 
   backend:
-    image: nginx:alpine
+    build: ./backend
     ports:
-      - "80:80"
+      - '3000:3000'
     depends_on:
-      - frontend
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: factsdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
